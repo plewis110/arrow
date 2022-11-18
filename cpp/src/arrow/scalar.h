@@ -253,6 +253,8 @@ struct ARROW_EXPORT BaseBinaryScalar : public internal::PrimitiveScalarBase {
 
   BaseBinaryScalar(std::shared_ptr<Buffer> value, std::shared_ptr<DataType> type)
       : internal::PrimitiveScalarBase{std::move(type), true}, value(std::move(value)) {}
+
+  BaseBinaryScalar(std::string s, std::shared_ptr<DataType> type);
 };
 
 struct ARROW_EXPORT BinaryScalar : public BaseBinaryScalar {
@@ -262,7 +264,7 @@ struct ARROW_EXPORT BinaryScalar : public BaseBinaryScalar {
   explicit BinaryScalar(std::shared_ptr<Buffer> value)
       : BinaryScalar(std::move(value), binary()) {}
 
-  explicit BinaryScalar(std::string s);
+  explicit BinaryScalar(std::string s) : BaseBinaryScalar(std::move(s), binary()) {}
 
   BinaryScalar() : BinaryScalar(binary()) {}
 };
@@ -274,6 +276,8 @@ struct ARROW_EXPORT StringScalar : public BinaryScalar {
   explicit StringScalar(std::shared_ptr<Buffer> value)
       : StringScalar(std::move(value), utf8()) {}
 
+  explicit StringScalar(std::string s) : BinaryScalar(std::move(s), utf8()) {}
+
   StringScalar() : StringScalar(utf8()) {}
 };
 
@@ -283,6 +287,9 @@ struct ARROW_EXPORT BinaryViewScalar : public BaseBinaryScalar {
 
   explicit BinaryViewScalar(std::shared_ptr<Buffer> value)
       : BinaryViewScalar(std::move(value), binary_view()) {}
+
+  explicit BinaryViewScalar(std::string s)
+      : BaseBinaryScalar(std::move(s), binary_view()) {}
 
   BinaryViewScalar() : BinaryViewScalar(binary_view()) {}
 
@@ -295,6 +302,9 @@ struct ARROW_EXPORT StringViewScalar : public BinaryViewScalar {
 
   explicit StringViewScalar(std::shared_ptr<Buffer> value)
       : StringViewScalar(std::move(value), utf8_view()) {}
+
+  explicit StringViewScalar(std::string s)
+      : BinaryViewScalar(std::move(s), utf8_view()) {}
 
   StringViewScalar() : StringViewScalar(utf8_view()) {}
 };
@@ -309,7 +319,8 @@ struct ARROW_EXPORT LargeBinaryScalar : public BaseBinaryScalar {
   explicit LargeBinaryScalar(std::shared_ptr<Buffer> value)
       : LargeBinaryScalar(std::move(value), large_binary()) {}
 
-  explicit LargeBinaryScalar(std::string s);
+  explicit LargeBinaryScalar(std::string s)
+      : BaseBinaryScalar(std::move(s), large_binary()) {}
 
   LargeBinaryScalar() : LargeBinaryScalar(large_binary()) {}
 };
@@ -321,7 +332,8 @@ struct ARROW_EXPORT LargeStringScalar : public LargeBinaryScalar {
   explicit LargeStringScalar(std::shared_ptr<Buffer> value)
       : LargeStringScalar(std::move(value), large_utf8()) {}
 
-  explicit LargeStringScalar(std::string s);
+  explicit LargeStringScalar(std::string s)
+      : LargeBinaryScalar(std::move(s), large_utf8()) {}
 
   LargeStringScalar() : LargeStringScalar(large_utf8()) {}
 };
