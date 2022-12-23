@@ -148,7 +148,6 @@ class PARQUET_EXPORT StreamWriter {
 
   /// \brief Output operators for variable length strings.
   StreamWriter& operator<<(const char* v);
-  StreamWriter& operator<<(const std::string& v);
   StreamWriter& operator<<(::std::string_view v);
 
   /// \brief Output operator for optional fields.
